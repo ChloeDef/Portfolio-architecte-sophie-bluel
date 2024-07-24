@@ -35,14 +35,14 @@ function login(id) {
     console.log(id);
     loginEmailError.innerHTML = "";
     loginMdpError.innerHTML = "";
-    // véeification de l'email
+    // vérification de l'email
     if (!id.email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/g)) {
         const p = document.createElement("p");
         p.innerHTML = "Veuillez entrer une addresse mail valide";
         loginEmailError.appendChild(p);
         return;
     }
-    // vérifcation du mot de passe
+    // vérification du mot de passe
     if (id.password.length < 5 && !id.password.match(/^[a-zA-Z0-9]+$/g)) {
         const p = document.createElement("p");
         p.innerHTML = "Veuillez entrer un mot de passe valide";
