@@ -21,7 +21,7 @@ function alredyLogged() {
     }
 }
 
-// Au clic, on envoie les valeurs de connextion
+// Au clic, on envoie les valeurs de connexion
 submit.addEventListener("click", () => {
     let user = {
         email: email.value,
