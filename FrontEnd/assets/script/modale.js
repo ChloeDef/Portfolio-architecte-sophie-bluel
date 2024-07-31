@@ -85,7 +85,22 @@ btnId2.addEventListener("click", () => { // Appartements
 btnId3.addEventListener("click", () => { // Hôtels & restaurants
     generationProjets(data, 3);})
 
+    // Si l'utilisateur est déjà connecté, on supprime les btn filtres
+    document.addEventListener('DOMContentLoaded', function() {
+        // Simuler l'état de connexion de l'utilisateur
+        var userLoggedIn = true; // Changez cette variable pour simuler l'état de connexion
+        
+        // Ajoutez dynamiquement la classe 'logged-in' au body si l'utilisateur est loggé
+        if (userLoggedIn) {
+            document.body.classList.add('logged-in');
+        }
 
+        // Vérifiez si le body a la classe 'logged-in'
+        if (document.body.classList.contains('logged-in')) {
+            // Ajoutez la classe 'hidden' à la div avec la classe 'filters'
+            document.querySelector('.filters').classList.add('hidden');
+        }
+    });
 
 //====================================================================================================================
 /////////////////////////////////////////////////////
@@ -220,10 +235,12 @@ function adminPanel() {
         else {
             a.removeAttribute("aria-hidden")
             a.removeAttribute("style")
-            AlredyLogged.innerHTML = "deconnexion";
+            AlredyLogged.innerHTML = "logout";
         }
     });
 }
+
+
 ////////////////////////////////////////////////////////////
 // INDEX : 3-// GESTION SUPPRESSION D'UN PROJET /////////////
 ////////////////////////////////////////////////////////////
@@ -327,8 +344,8 @@ const backToModale = function(e) {
 // // INDEX : 5-/ GESTION AJOUT D'UN PROJET        ///
 // ////////////////////////////////////////////////////
 
-const btnAjouterProjet = document.querySelector(".js-add-work");
-btnAjouterProjet.addEventListener("click", addWork);
+const btnValider = document.querySelector(".js-add-work");
+btnValider.addEventListener("click", addWork);
 
 // Ajouter un projet
 async function addWork(event) {
@@ -361,7 +378,7 @@ async function addWork(event) {
         });
 
         if (response.status === 201) {
-            alert("Projet ajouté avec succès :)");
+            alert("Photo ajoutée avec succès :)");
             modaleProjets(dataAdmin);
             backToModale(event);
             generationProjets(data, null);
@@ -371,7 +388,7 @@ async function addWork(event) {
         } else if (response.status === 500) {
             alert("Erreur serveur");
         } else if (response.status === 401) {
-            alert("Vous n'êtes pas autorisé à ajouter un projet");
+            alert("Vous n'êtes pas autorisé à ajouter une photo");
             window.location.href = "login.html";
     }}
 

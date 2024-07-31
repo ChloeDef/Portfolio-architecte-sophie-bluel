@@ -327,7 +327,7 @@ figcaption {
   margin-top: 10px;
   font-family: "Work Sans";
   font-size: 1em;
-  color: #1D6154;
+  color: black;
 }
 
 figure {
@@ -380,6 +380,7 @@ figure {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 /* MODALE  GALERIE PHOTO*/
@@ -494,7 +495,7 @@ figure {
   font-weight: 700;
   color: white;
   background-color: #1D6154;
-  border: 2px solid #1D6154;
+  border: 13px solid #1D6154;
   margin: 0 auto 30px auto;
   height: 50px;
   width: 250px;
@@ -722,13 +723,17 @@ figure {
 
 a {
   text-decoration: none;
-  color: #1D6154;
+  color: black;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   margin: 50px 0;
+}
+
+li img {
+  height: 1.5rem;
 }
 
 /* FOOTER */
@@ -750,6 +755,10 @@ footer nav ul {
   display: flex;
   justify-content: center;
   margin: 40px 0;
+}
+
+.hidden {
+  display: none;
 }
 
 .filter__btn, .btn-admin {

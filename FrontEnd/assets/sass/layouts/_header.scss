@@ -1,10 +1,14 @@
 a{
 	text-decoration: none;
-	color: #1D6154;
+	color: black;
 }
 
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0;
+}
+
+li img {
+	height: 1.5rem;
 }
