@@ -401,7 +401,6 @@ figure {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  max-width: calc(98vh - 20px);
   max-height: calc(98vh - 20px);
   width: 675px;
   padding: 30px;

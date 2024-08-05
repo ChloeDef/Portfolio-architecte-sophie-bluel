@@ -10,10 +10,11 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/sass/style.css"> 
 	<script type="module" src="./assets/script/modale.js"></script> 
+	<script type="module" src="./assets/script/.js"></script> 
 	<script src="https://kit.fontawesome.com/73db696eb9.js" crossorigin="anonymous"></script>
 </head>
 
-<body class="logged-in">
+<body>
 <!-- MODULE ADMIN -->
 <aside class="admin__rod admin__modifer" aria-hidden="true" style="display: none;">
 	<div class="admin__modifer">
@@ -118,7 +119,7 @@
 				<a href="#modale" class="js-modale">Modifier</a>
 			</div>
 		</div>
-		<div class="filters">
+		<div class="filters" id="filtresremove">
 			<button class="filter__btn filter__btn-id-null filter__btn--active">Tous</button>
 			<button class="filter__btn filter__btn-id-1">Objets</button>
 			<button class="filter__btn filter__btn-id-2">Appartements</button>
