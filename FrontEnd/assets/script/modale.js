@@ -35,10 +35,6 @@ async function generationProjets(data, id) {
 
     resetSectionProjets();
 
-    // Filtre les résultats
-    if ([1, 2, 3].includes(id)) {
-        data = data.filter(data => data.categoryId == id);
-    }
 
     // Change la couleur du bouton en fonction du filtre
     document.querySelectorAll(".filter__btn").forEach(btn => {
@@ -313,7 +309,7 @@ async function getCategories() {
 async function addCategoriesToModal() {
     const categorySelect = document.querySelector('.js-categoryId');
     const categories = await getCategories();
-    categorySelect.innerHTML = ''; // Réinitialiser les options
+    categorySelect.innerHTML = ''; // Réinitialise les options
 
     categories.forEach(category => {
         const option = document.createElement('option');
