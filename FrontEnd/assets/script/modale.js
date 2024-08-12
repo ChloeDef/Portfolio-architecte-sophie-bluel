@@ -303,3 +303,34 @@ window.addEventListener("keydown", function(e) {
         closeModaleProjet(e);
     }
 });
+
+// Affiche l'image sélectionnée dynamiquement
+
+document.getElementById("photo").addEventListener("change", function(event) {
+    const preview = document.getElementById("preview");
+    const file = event.target.files[0];
+    const icon = document.querySelector(".form-group-photo i");
+    const label = document.querySelector(".form-group-photo label");
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+
+            // Cache les autres éléments dans la div
+            icon.classList.add("hidden");
+            label.classList.add("hidden");
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = "";
+        preview.style.display = "none";
+
+        // Montre à nouveau les autres éléments si aucun fichier n'est sélectionné
+        icon.classList.remove("hidden");
+        label.classList.remove("hidden");
+    }
+});
