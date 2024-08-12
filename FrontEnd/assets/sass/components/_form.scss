@@ -124,8 +124,8 @@
 }
 .form-group-photo::after {
 	content: "jpg, png : 4mo max";
-	position: absolute;
-	top: 315px;
+	position: relative;
+	top: 15px;
 }
 
 
@@ -180,10 +180,10 @@
 
 .modale-projet-form::after{
 	content: " ";
-	border-top: 1px solid black;
+	border-top: 2px solid #c6d0d6;
 	height: 1px;
 	width: 70%;
 	margin: 40px auto;
-	position: absolute;
-	bottom: 120px;
+	position: relative;
+	bottom: 170px;
 }
