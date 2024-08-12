@@ -311,6 +311,7 @@ document.getElementById("photo").addEventListener("change", function(event) {
     const file = event.target.files[0];
     const icon = document.querySelector(".form-group-photo i");
     const label = document.querySelector(".form-group-photo label");
+    const formGroupPhoto = document.querySelector(".form-group-photo");
 
     if (file) {
         const reader = new FileReader();
@@ -319,9 +320,10 @@ document.getElementById("photo").addEventListener("change", function(event) {
             preview.src = e.target.result;
             preview.style.display = "block";
 
-            // Cache les autres éléments dans la div
+            // Cache les autres éléments dans la div et le ::after
             icon.classList.add("hidden");
             label.classList.add("hidden");
+            formGroupPhoto.classList.add("image-selected");
         };
 
         reader.readAsDataURL(file);
@@ -329,8 +331,9 @@ document.getElementById("photo").addEventListener("change", function(event) {
         preview.src = "";
         preview.style.display = "none";
 
-        // Montre à nouveau les autres éléments si aucun fichier n'est sélectionné
+        // Réaffiche les éléments si aucun fichier n'est sélectionné
         icon.classList.remove("hidden");
         label.classList.remove("hidden");
+        formGroupPhoto.classList.remove("image-selected");
     }
 });
