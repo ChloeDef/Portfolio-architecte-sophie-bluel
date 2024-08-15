@@ -56,7 +56,7 @@ async function generationProjets(id = null) {
         return;
     }
 
-    // Filtrer les projets par catégorie si un id est fourni
+    // Filtre les projets par catégorie si un id est fourni
     const filteredData = id ? data.filter(project => project.categoryId === id) : data;
 
     filteredData.forEach(project => {
@@ -79,16 +79,16 @@ async function generationProjets(id = null) {
 async function generateFilterButtons() {
     const categories = await getCategories();
     const filterDiv = document.querySelector('.filters');
-    filterDiv.innerHTML = ''; // Réinitialiser les boutons existants
+    filterDiv.innerHTML = ''; // Réinitialise les boutons existants
 
-    // Ajouter le bouton "Tous"
+    // Ajoute le bouton "Tous"
     const btnAll = document.createElement('button');
     btnAll.classList.add('filter__btn', 'filter__btn-id-null');
     btnAll.textContent = 'Tous';
     btnAll.addEventListener('click', () => generationProjets(null));
     filterDiv.appendChild(btnAll);
 
-    // Ajouter les boutons pour chaque catégorie
+    // Ajoute les boutons pour chaque catégorie
     categories.forEach(category => {
         const btn = document.createElement('button');
         btn.classList.add('filter__btn', `filter__btn-id-${category.id}`);
@@ -98,7 +98,7 @@ async function generateFilterButtons() {
     });
 }
 
-// Appeler la fonction pour générer les boutons dès le chargement de la page
+// Appelle la fonction pour générer les boutons dès le chargement de la page
 generateFilterButtons();
 generationProjets();
 
@@ -283,7 +283,7 @@ async function addCategoriesToModal() {
     const categories = await getCategories();
     const selectElement = document.getElementById("category");
 
-    // Réinitialiser les options existantes
+    // Réinitialise les options existantes
     selectElement.innerHTML = "";
 
     categories.forEach(category => {
