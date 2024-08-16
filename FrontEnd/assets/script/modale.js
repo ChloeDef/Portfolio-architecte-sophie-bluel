@@ -3,20 +3,48 @@
 /////////////////////////////////////////////////////
 
 const sectionProjets = document.querySelector(".gallery");
-let data = null;
 
-// Fonction pour récupérer les catégories depuis l'API
+// Fonction pour récupérer les catégories depuis l'API ou le localStorage
 async function getCategories() {
-    try {
-        const response = await fetch('http://localhost:5678/api/categories');
-        if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des catégories');
+    let categories = JSON.parse(localStorage.getItem('categories'));
+    if (!categories) {
+        try {
+            const response = await fetch('http://localhost:5678/api/categories');
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des catégories');
+            }
+            categories = await response.json();
+            localStorage.setItem('categories', JSON.stringify(categories));
+        } catch (error) {
+            console.error(error);
+            return [];
         }
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-        return [];
     }
+    return categories;
+}
+
+// Fonction pour récupérer les projets depuis l'API ou le localStorage
+async function getProjects() {
+    let projects = JSON.parse(localStorage.getItem('projects'));
+    if (!projects) {
+        try {
+            const response = await fetch('http://localhost:5678/api/works');
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des projets');
+            }
+            projects = await response.json();
+            localStorage.setItem('projects', JSON.stringify(projects));
+        } catch (error) {
+            const p = document.createElement("p");
+            p.classList.add("error");
+            p.innerHTML = "Une erreur est survenue lors de la récupération des projets.<br><br>Une tentative de reconnexion automatique aura lieu dans une minute.<br><br><br><br>Si le problème persiste, veuillez contacter l'administrateur du site.";
+            sectionProjets.appendChild(p);
+            await new Promise(resolve => setTimeout(resolve, 60000));
+            window.location.href = "index.html";
+            return [];
+        }
+    }
+    return projects;
 }
 
 // Fonction pour réinitialiser la section des projets
@@ -26,18 +54,7 @@ function resetSectionProjets() {
 
 // Fonction pour générer les projets
 async function generationProjets(id = null) {
-    try {
-        const response = await fetch('http://localhost:5678/api/works');
-        data = await response.json();
-    } catch (error) {
-        const p = document.createElement("p");
-        p.classList.add("error");
-        p.innerHTML = "Une erreur est survenue lors de la récupération des projets.<br><br>Une tentative de reconnexion automatique aura lieu dans une minute.<br><br><br><br>Si le problème persiste, veuillez contacter l'administrateur du site.";
-        sectionProjets.appendChild(p);
-        await new Promise(resolve => setTimeout(resolve, 60000));
-        window.location.href = "index.html";
-        return;
-    }
+    const data = await getProjects();
 
     resetSectionProjets();
 
@@ -174,8 +191,7 @@ window.addEventListener("keydown", function(e) {
 
 // Génère les projets dans la modale admin
 async function modaleProjets() {
-    const response = await fetch('http://localhost:5678/api/works');
-    dataAdmin = await response.json();
+    const dataAdmin = await getProjects();
     resetmodaleSectionProjets();
     dataAdmin.forEach(project => {
         const div = document.createElement("div");
