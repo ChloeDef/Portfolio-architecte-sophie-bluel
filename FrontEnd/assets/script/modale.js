@@ -320,6 +320,7 @@ window.addEventListener("keydown", function(e) {
     }
 });
 
+
 // Affiche l'image sélectionnée dynamiquement
 
 document.getElementById("photo").addEventListener("change", function(event) {
