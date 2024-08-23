@@ -223,6 +223,7 @@ function resetmodaleSectionProjets() {
     modaleSectionProjets.innerHTML = "";
 }
 
+
 //////////////////////////////////////////////
 // Gestion suppression d'un projet ///////////
 //////////////////////////////////////////////
@@ -379,6 +380,7 @@ async function addWork(event) {
             modaleProjets(dataAdmin);
             backToModale(event);
             generationProjets(data, null);
+            refreshPage(this.classList[0]);
             
         } else if (response.status === 400) {
             alert("Merci de remplir tous les champs");
@@ -392,7 +394,6 @@ async function addWork(event) {
     catch (error) {
         console.log(error);
 }}}
-
 
 
 // Affiche l'image sélectionnée dynamiquement
