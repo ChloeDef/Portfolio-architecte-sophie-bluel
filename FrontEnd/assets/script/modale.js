@@ -223,43 +223,61 @@ function resetmodaleSectionProjets() {
     modaleSectionProjets.innerHTML = "";
 }
 
-// Gestion de la suppression des projets
+//////////////////////////////////////////////
+// Gestion suppression d'un projet ///////////
+//////////////////////////////////////////////
+
+// Event listener sur les boutons supprimer par apport a leur id
 function deleteWork() {
     let btnDelete = document.querySelectorAll(".js-delete-work");
-    btnDelete.forEach(btn => {
-        btn.addEventListener("click", async function() {
-            await fetch(`http://localhost:5678/api/works/${this.classList[0]}`, {
-                method: "DELETE",
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then(response => {
-                if (response.status === 204) {
-                    refreshPage(this.classList[0]);
-                } else if (response.status === 401 || response.status === 404) {
-                    alert("Token incorrect, déconnexion en cours");
-                    logout();
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        });
-    });
+    for (let i = 0; i < btnDelete.length; i++) {
+        btnDelete[i].addEventListener("click", deleteProjets);
+    }}
+
+// Supprimer le projet
+async function deleteProjets() {
+
+    console.log("DEBUG DEBUT DE FUNCTION SUPRESSION")
+    console.log(this.classList[0])
+    console.log(token)
+
+    await fetch(`http://localhost:5678/api/works/${this.classList[0]}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}`},
+    })
+
+    .then (response => {
+        console.log(response)
+        // Token good
+        if (response.status === 204) {
+            console.log("DEBUG SUPPRESSION DU PROJET " + this.classList[0])
+            refreshPage(this.classList[0])
+        }
+        // Token incorrect
+        else if (response.status === 401) {
+            alert("Vous n'êtes pas autorisé à supprimer ce projet, merci de vous connecter avec un compte valide")
+            window.location.href = "login.html";
+        }
+    })
+    .catch (error => {
+        console.log(error)
+    })
 }
 
-// Fonction de déconnexion
-function logout() {
-    localStorage.removeItem("token");
-    location.reload();
+// Rafraichit les projets sans recharger la page
+async function refreshPage(i){
+    modaleProjets(); // Lance à nouveau une génération des projets dans la modale admin
+
+    // supprime le projet de la page d'accueil
+    const projet = document.querySelector(`.js-projet-${i}`);
+    projet.style.display = "none";
 }
 
-// Rafraîchir la page après suppression du projet
-function refreshPage(id) {
-    document.querySelector(`.js-projet-${id}`).remove();
-    document.querySelector(`.${id}`).parentElement.remove();
-}
+//////////////////////////////////////////////
+// Gestion boite modale ajout d'un projet ////
+//////////////////////////////////////////////
 
-// Ouverture et gestion de la modale projet
+// Ouverture de la modale projet
 let modaleProjet = null;
 
 function openModaleProjet(e) {
@@ -319,6 +337,64 @@ window.addEventListener("keydown", function(e) {
         closeModaleProjet(e);
     }
 });
+
+
+// Gestion ajout des projets
+
+const btnAjouterProjet = document.querySelector(".js-add-work");
+btnAjouterProjet.addEventListener("click", addWork);
+
+// Ajouter un projet
+async function addWork(event) {
+    event.preventDefault();
+
+    const title = document.querySelector(".js-title").value;
+    const categoryId = document.querySelector(".js-categoryId").value;
+    const image = document.querySelector(".js-image").files[0];
+
+
+    if (title === "" || categoryId === "" || image === undefined) {
+        alert("Merci de remplir tous les champs");
+        return;
+    } else if (categoryId !== "1" && categoryId !== "2" && categoryId !== "3") {
+        alert("Merci de choisir une catégorie valide");
+        return;
+        } else {
+    try {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("category", categoryId);
+        formData.append("image", image);
+
+        const response = await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
+
+        if (response.status === 201) {
+            alert("Projet ajouté avec succès :)");
+            modaleProjets(dataAdmin);
+            backToModale(event);
+            generationProjets(data, null);
+            
+        } else if (response.status === 400) {
+            alert("Merci de remplir tous les champs");
+        } else if (response.status === 500) {
+            alert("Erreur serveur");
+        } else if (response.status === 401) {
+            alert("Vous n'êtes pas autorisé à ajouter un projet");
+            window.location.href = "login.html";
+    }}
+
+    catch (error) {
+        console.log(error);
+}}}
+
+
+
 
 
 // Affiche l'image sélectionnée dynamiquement
