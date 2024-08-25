@@ -252,6 +252,7 @@ async function deleteProjets() {
         // Token good
         if (response.status === 204) {
             console.log("DEBUG SUPPRESSION DU PROJET " + this.classList[0])
+            updateLocalStorage();
             refreshPage(this.classList[0])
         }
         // Token incorrect
@@ -265,13 +266,32 @@ async function deleteProjets() {
     })
 }
 
+// Met à jour le localStorage après un DELETE ou un AJOUT
+async function updateLocalStorage() {
+    try {
+        const response = await fetch('http://localhost:5678/api/works');
+        if (response.ok) {
+            const projects = await response.json();
+            localStorage.setItem('projects', JSON.stringify(projects));
+        } else {
+            console.error('Erreur lors de la mise à jour du localStorage');
+        }
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour du localStorage', error);
+    }
+}
+
 // Rafraichit les projets sans recharger la page
 async function refreshPage(i){
-    modaleProjets(); // Lance à nouveau une génération des projets dans la modale admin
+    await modaleProjets(); // Lance à nouveau une génération des projets dans la modale admin
+    await generationProjets(); // Rafraîchit l'affichage sur la page d'accueil
+    
 
-    // supprime le projet de la page d'accueil
+    // Supprime le projet de la page d'accueil
     const projet = document.querySelector(`.js-projet-${i}`);
-    projet.style.display = "none";
+    if (projet) {
+        projet.style.display = "none";
+    }
 }
 
 //////////////////////////////////////////////
@@ -339,8 +359,9 @@ window.addEventListener("keydown", function(e) {
     }
 });
 
-
-// Gestion ajout des projets
+///////////////////////////////
+// Gestion ajout des projets///
+///////////////////////////////
 
 const btnAjouterProjet = document.querySelector(".js-add-work");
 btnAjouterProjet.addEventListener("click", addWork);
@@ -353,14 +374,11 @@ async function addWork(event) {
     const categoryId = document.querySelector(".js-categoryId").value;
     const image = document.querySelector(".js-image").files[0];
 
-
     if (title === "" || categoryId === "" || image === undefined) {
         alert("Merci de remplir tous les champs");
         return;
-    } else if (categoryId !== "1" && categoryId !== "2" && categoryId !== "3") {
-        alert("Merci de choisir une catégorie valide");
-        return;
-        } else {
+    }
+
     try {
         const formData = new FormData();
         formData.append("title", title);
@@ -376,24 +394,37 @@ async function addWork(event) {
         });
 
         if (response.status === 201) {
-            alert("Projet ajouté avec succès :)");
-            modaleProjets(dataAdmin);
-            backToModale(event);
-            generationProjets(data, null);
-            refreshPage(this.classList[0]);
-            
-        } else if (response.status === 400) {
-            alert("Merci de remplir tous les champs");
-        } else if (response.status === 500) {
-            alert("Erreur serveur");
-        } else if (response.status === 401) {
-            alert("Vous n'êtes pas autorisé à ajouter un projet");
-            window.location.href = "login.html";
-    }}
+            const newProject = await response.json();
 
-    catch (error) {
+            // Récupérer les projets actuels et ajouter le nouveau projet
+            let projects = JSON.parse(localStorage.getItem('projects')) || [];
+            projects.push(newProject);
+            localStorage.setItem('projects', JSON.stringify(projects));
+
+            // Rafraîchir l'affichage
+            generationProjets(null);
+            modaleProjets();
+
+            closeModaleProjet(event);
+        } else {
+            handleErrors(response);
+        }
+    } catch (error) {
         console.log(error);
-}}}
+    }
+}
+
+function handleErrors(response) {
+    if (response.status === 400) {
+        alert("Merci de remplir tous les champs");
+    } else if (response.status === 500) {
+        alert("Erreur serveur");
+    } else if (response.status === 401) {
+        alert("Vous n'êtes pas autorisé à ajouter un projet");
+        window.location.href = "login.html";
+    }
+}
+
 
 
 // Affiche l'image sélectionnée dynamiquement
